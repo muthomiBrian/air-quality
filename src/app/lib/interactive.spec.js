@@ -13,10 +13,7 @@ describe('Interactive', () => {
   it('should render the cigarettes display', () => {
     expect(typeof interactive.renderCigg).to.equal('function');
   });
-  it('should render the PM 2.5', () => {
-    expect(typeof interactive.renderPm).to.equal('function');
-  });
   it('should show cities when searched on search', () => {
-    expect(typeof interactive.renderCities).to.equal('function');
+    expect(typeof interactive.showCityNames).to.equal('function');
   });
 });

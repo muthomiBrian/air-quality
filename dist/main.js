@@ -263,35 +263,141 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Interactive =
 /*#__PURE__*/
 function () {
-  function Interactive(leading, compare) {
+  function Interactive(leading, compare, interactive) {
     _classCallCheck(this, Interactive);
 
     this.compare = compare;
     this.leading = leading;
+    this.interactive = interactive;
+    this.leadingPara = document.createElement('p');
+    this.interactiveDiv = document.createElement('div');
+    this.initialized = false;
   }
 
   _createClass(Interactive, [{
+    key: "setleadingPara",
+    value: function setleadingPara() {
+      this.leadingPara = document.querySelector(this.leading);
+      this.interactiveDiv = document.querySelector(this.interactive);
+    }
+  }, {
     key: "refreshInteractive",
     value: function refreshInteractive() {
+      this.setleadingPara();
       this.render();
+    }
+  }, {
+    key: "search",
+    value: function search(event) {
+      var str = event.target.value;
+
+      if (str === '') {
+        return [];
+      }
+
+      return this.compare.search(str);
+    }
+  }, {
+    key: "showCityNames",
+    value: function showCityNames(event) {
+      var _this = this;
+
+      var cities = this.search(event);
+      var results = event.target.nextElementSibling;
+      results.innerHTML = '';
+      cities.forEach(function (city) {
+        var button = document.createElement('button');
+        button.innerHTML = city;
+        button.addEventListener('click', function () {
+          event.target.value = city;
+
+          _this.selectCity(city, results, event);
+        });
+        results.appendChild(button);
+      });
+    }
+  }, {
+    key: "selectCity",
+    value: function selectCity(cityName, results) {
+      this.city = this.compare.selectCity(cityName);
+      results.innerHTML = '';
+      this.refreshInteractive();
     }
   }, {
     key: "render",
     value: function render() {
-      console.log('rendered');
+      var interact = this.interactiveDiv.cloneNode(true);
+      console.log(interact);
+      console.log(this.leadingPara);
+      var prevInteract = document.querySelector('.used');
+
+      if (prevInteract !== null) {
+        prevInteract.parentElement.removeChild(prevInteract);
+      }
+
+      interact.querySelector('.title').innerHTML = this.compare.title;
+      interact.querySelector('.method').innerHTML = this.compare.method;
+      interact.removeAttribute('hidden');
+
+      if (typeof this.city !== 'undefined') {
+        this.renderName(interact);
+        this.renderCiggImg(interact);
+        this.renderCigg(interact);
+      }
+
+      interact.classList.add('used');
+      this.leadingPara.insertAdjacentElement('afterend', interact);
+      this.initialized = true;
     }
   }, {
     key: "renderName",
-    value: function renderName() {}
+    value: function renderName(interact) {
+      var nameEl = interact.querySelector('.city-name');
+      nameEl.innerHTML = "<strong>".concat(this.city.name, "</strong> : <span class=\"pm-25\">").concat(this.city.aqi, "</span>, which is equivalent to -");
+    }
+  }, {
+    key: "renderCiggImg",
+    value: function renderCiggImg(interact) {
+      var imgEl = interact.querySelector('.ciggImages');
+      var packs = Math.floor(this.city.cigg / 5);
+      var ciggs = this.city.cigg % 5;
+      imgEl.innerHTML = '';
+
+      while (packs > 0) {
+        var packDiv = document.createElement('div');
+        packDiv.classList.add('pack');
+        var count = 5;
+
+        while (count > 0) {
+          var cigg = document.createElement('img');
+          cigg.classList.add('cig-img');
+          cigg.src = './assets/ciggrette_icon.png';
+          cigg.alt = 'cigarette';
+          packDiv.appendChild(cigg);
+          count -= 1;
+        }
+
+        imgEl.appendChild(packDiv);
+        packs -= 1;
+      }
+
+      while (ciggs > 0) {
+        var _cigg = document.createElement('img');
+
+        _cigg.classList.add('cig-img');
+
+        _cigg.src = './assets/ciggrette_icon.png';
+        _cigg.alt = 'cigarette';
+        imgEl.appendChild(_cigg);
+        ciggs -= 1;
+      }
+    }
   }, {
     key: "renderCigg",
-    value: function renderCigg() {}
-  }, {
-    key: "renderPm",
-    value: function renderPm() {}
-  }, {
-    key: "renderCities",
-    value: function renderCities() {}
+    value: function renderCigg(interact) {
+      var ciggEl = interact.querySelector('.ciggNumber');
+      ciggEl.innerHTML = "<em>".concat(this.city.cigg, " Cigarettes.</em>");
+    }
   }]);
 
   return Interactive;
@@ -441,28 +547,15 @@ function () {
 }();
 "use strict";
 
-// Register service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/sw.js').then(function () {
-      console.log('Service worker registration successful.');
-    }, function (err) {
-      console.log(err);
-      console.log('Service worker registration failed.');
-    });
-  });
-}
-
 var api = new Api();
 api.loadLang(['english', './data/english.json']);
 api.loadLang(['hindi', './data/hindi.json']);
 var main = document.querySelector('.main');
-var leading = document.querySelector('.leading');
 var hero = new Hero(main);
 var article = new ArticleInfo(main);
 var para = new Paragraphs(main, 4, [5]);
 var comp = new Compare();
-var interactive = new Interactive(leading, comp);
+var interactive = new Interactive('.leading', comp, '.interact-wrapper');
 var lang = new LanguageSelect(api, main);
 lang.subscribe(hero.setHero, hero);
 lang.subscribe(article.setArticleInfo, article);
@@ -470,4 +563,4 @@ lang.subscribe(lang.render, lang);
 lang.subscribe(para.setPara, para);
 lang.subscribe(comp.setCompare, comp);
 lang.subscribe(interactive.refreshInteractive, interactive);
-lang.getData('english');
+lang.getData('hindi');

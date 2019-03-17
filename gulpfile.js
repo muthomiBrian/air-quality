@@ -30,19 +30,19 @@ function styles() {
     .pipe(gulp.dest('./dist'));
 }
 
-function sw() {
-  return gulp.src('./src/sw/sw.js')
-    .pipe(gulp.dest('./dist/'));
-}
-
 function data() {
   return gulp.src('./src/data/*.json')
     .pipe(gulp.dest('./dist/data/'));
 }
 
-function watch() {
-  return gulp.watch('./src', gulp.series(views, scripts, data, sw, styles));
+function assets() {
+  return gulp.src('./src/assets/*.*')
+    .pipe(gulp.dest('./dist/assets/'));
 }
 
-gulp.task('default', gulp.series(clean, views, scripts, data, sw, styles));
+function watch() {
+  return gulp.watch('./src', gulp.series(views, scripts, data, styles, assets));
+}
+
+gulp.task('default', gulp.series(clean, views, scripts, data, styles, assets));
 gulp.task('watch', watch);

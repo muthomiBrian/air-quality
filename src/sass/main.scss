@@ -360,10 +360,12 @@ body {
   font: 16px sans-serif;
   color: $text;
   line-height: 1.25;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 button {
-  min-height: 35px;
+  min-height: 40px;
   background: $text;
   color: #fff;
   border: none;
@@ -431,7 +433,7 @@ button {
 
   button {
     margin-right: 10px;
-    
+    background: hsl(0, 74, 45);
   }
 }
 
@@ -445,3 +447,67 @@ button {
 .subheading {
   font-weight: bold;
 }
+
+.interact-wrapper {
+  background: $background;
+  padding: 20px;
+  .interact {
+    max-width: 500px;
+    margin: 0 auto;
+    input {
+      min-height: 40px;
+      width: 100%;
+      border: 1px solid $background;
+      padding-left: 10px;
+    }
+  
+    .search-results {
+      width: 100%;
+  
+      button {
+        width: 100%;
+        background: #fff;
+        color: $text;
+        border-bottom: 1px solid $background;
+        text-align: left;
+      }
+    }
+  
+    .display-area {
+      margin-top: 40px;
+      .cigg {
+  
+        .ciggImages {
+          min-height: 80px;
+          .pack {
+            float:left;
+            margin-right: 20px;
+          }
+          .cig-img {
+            max-width: 15px;
+            margin: 0;
+          }
+        }
+  
+        .ciggNumber {
+          text-align: center;
+          clear: both;
+        }
+  
+      }
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .hero-image {
+    margin-top: -100px;
+  }
+}
+
+@media (min-width: 800px) {
+  .hero-image {
+    margin-top: -200px;
+  }
+}
+

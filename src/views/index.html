@@ -11,27 +11,26 @@
   <main class="main">
 
   </main>
-  <div class="interact">
-    <div class="search">
-      <input type="text" name="city" id="city" placeholder="Start searching your city..."/>
-      <div class="search-results">
-        <button>Example city</button>
-      </div>
-    </div>
-    <div class="display-area">
-      <h3 class="city-name">Random City</h3>
-      <div class="cigg">
-        <div class="ciggImages">
-          <img src="./img/" alt="">
-        </div>
-        <div class="ciggNumber"></div>
-      </div>
-      <div class="pm-25">
-        <div class="pm-number">2.5</div>
-        <div class="pm">pm</div>
-      </div>
-    </div>
+  <div class="interact-wrapper" hidden>
 
+    <div class="interact">
+      <div class="header">
+        <h3 class="title"></h3>
+        <p class="method"></p>
+      </div>
+      <div class="search">
+        <input type="text" name="city" id="city" placeholder="Start searching your city..."/ oninput="interactive.showCityNames(event)">
+        <div class="search-results"></div>
+      </div>
+      <div class="display-area">
+        <p class="city-name"></p>
+        <div class="cigg">
+          <div class="ciggImages"></div>
+          <div class="ciggNumber"></div>
+        </div>
+      </div>
+  
+    </div>
   </div>
   <script src="./main-min.js"></script>
 </body>
