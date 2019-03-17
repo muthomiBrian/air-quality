@@ -12,6 +12,6 @@ $ npm i
 $ npm start
 ```
 
-Open you browser and navigate to `http://localhost:{PORT}`. Replace Port with the server port indicate on the console
+Open you browser and navigate to `http://localhost:{PORT}`. Replace PORT with the server port indicated on the console.
 
 
